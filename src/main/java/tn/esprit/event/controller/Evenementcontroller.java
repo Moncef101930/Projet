@@ -1,6 +1,6 @@
 package tn.esprit.event.controller;
 
-import Service.EvenementService;
+
 import entite.Evenements;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import tn.esprit.event.MainFX;
+import tn.esprit.event.service.EvenementService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,6 +37,7 @@ public class Evenementcontroller {
 
 
     @FXML
+
     void bone(ActionEvent event) {
         String nom = nomEvenement.getText().trim();
         String description = descriptionEvenement.getText().trim();
@@ -120,7 +123,7 @@ public class Evenementcontroller {
     @FXML
     void goToNextPage(ActionEvent event)  {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvent.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("AffichageEvent.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

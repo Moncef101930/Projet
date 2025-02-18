@@ -58,7 +58,7 @@ public class AdminController {
         prenomColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        roleComboBox.setItems(FXCollections.observableArrayList("ADMIN", "USER"));
+        roleComboBox.setItems(FXCollections.observableArrayList("ADMIN", "USER","ORGANISATEUR"));
         userList = FXCollections.observableArrayList(service.afficher());
         userTable.setItems(userList);
         addActionsToTable();

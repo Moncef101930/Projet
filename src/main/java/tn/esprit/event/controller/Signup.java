@@ -39,8 +39,16 @@ public class Signup {
 
     @FXML
     private Label errorLabel;
+    @FXML
+    private ComboBox<Role> roleComboBox;
 
     private ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur();
+    @FXML
+    public void initialize() {
+        roleComboBox.getItems().addAll(Role.USER, Role.ORGANISATEUR);
+
+        roleComboBox.setValue(Role.USER);
+    }
 
     @FXML
     private void handleSignup(ActionEvent event) {
@@ -57,7 +65,7 @@ public class Signup {
 
 
 
-        Utilisateur user = new Utilisateur(nom, prenom, email, password, Role.USER, dateNaissance, bio, image);
+        Utilisateur user = new Utilisateur(nom, prenom, email, password, roleComboBox.getValue(), dateNaissance, bio, image);
         serviceUtilisateur.ajouter(user);
         errorLabel.setText("Signup successful! Redirecting to login...");
 

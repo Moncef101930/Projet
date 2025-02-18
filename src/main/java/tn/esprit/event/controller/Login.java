@@ -44,9 +44,12 @@ public class Login {
                 FXMLLoader loader;
                 if(user.getRole() == Role.ADMIN) {
                     loader = new FXMLLoader(MainFX.class.getResource("admin-user.fxml"));
-                } else {
+                } else if(user.getRole() == Role.USER) {
                     Session.setCurrentUser(user);
                     loader = new FXMLLoader(MainFX.class.getResource("profile.fxml"));
+                }else{
+                    Session.setCurrentUser(user);
+                    loader = new FXMLLoader(MainFX.class.getResource("dashbord.fxml"));
                 }
                 Parent root = loader.load();
                 stage.setScene(new Scene(root));

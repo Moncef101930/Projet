@@ -8,5 +8,4 @@ module tn.esprit.event {
     opens tn.esprit.event.controller to javafx.fxml;
     opens tn.esprit.event.entity to javafx.base, javafx.fxml;
     exports tn.esprit.event;
-    opens Controller to javafx.fxml;
 }

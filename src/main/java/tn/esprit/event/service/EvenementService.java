@@ -1,17 +1,18 @@
-package Service;
+package tn.esprit.event.service;
 
 import entite.Evenements;
-import utile.DataSource;
+import tn.esprit.event.utils.MyConnection;
+
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EvenementService implements Iservice<Evenements> {
+public class EvenementService implements Iservice2<Evenements> {
     private final Connection con;
 
     public EvenementService() {
-        con = DataSource.getInstance().getConnection();
+        con = MyConnection.getInstance().getCnx();
     }
 
     @Override

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Evenementcontroller">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.event.controller.Evenementcontroller">
     <children>
         <TextField fx:id="nomEvenement" layoutX="185.0" layoutY="82.0" prefHeight="26.0" prefWidth="175.0" promptText="Nom de l'événement" />
         <TextField fx:id="lieuEvenement" layoutX="185.0" layoutY="130.0" prefHeight="26.0" prefWidth="175.0" promptText="Lieu de l'événement" />

@@ -1,7 +1,6 @@
 package tn.esprit.event.controller;
 
-import Service.CategorieService;
-import entite.Categorie;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +11,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import tn.esprit.event.MainFX;
+import tn.esprit.event.entity.Categorie;
+import tn.esprit.event.service.CategorieService;
 
 import java.io.IOException;
 
@@ -45,13 +47,13 @@ public class CategorieController {
         String description = Description.getText().trim();
 
         if (nom.isEmpty() || description.isEmpty()) {
-            showAlert("Erreur", "Le nom et la description ne peuvent pas être vides !");
+            showAlert("Erreur", "Le nom et la description ne peuvent pas ï¿½tre vides !");
             return;
         }
 
         Categorie c1 = new Categorie(nom, description);
         cs.add(c1);
-        showAlert("Succès", "Catégorie ajoutée avec succès !");
+        showAlert("Succï¿½s", "Catï¿½gorie ajoutï¿½e avec succï¿½s !");
         clearFields();
     }
 
@@ -67,7 +69,7 @@ public class CategorieController {
 
         Categorie c1 = new Categorie(nom, description);
         cs.delete(c1);
-        showAlert("Succès", "Catégorie supprimée avec succès !");
+        showAlert("Succï¿½s", "Catï¿½gorie supprimï¿½e avec succï¿½s !");
         clearFields();
     }
 
@@ -95,19 +97,20 @@ public class CategorieController {
 
         Categorie c1 = new Categorie(nom1, description);
         cs.update(c1);
-        showAlert("Succès", "Catégorie modifiée avec succès !");
+        showAlert("Succï¿½s", "Catï¿½gorie modifiï¿½e avec succï¿½s !");
         clearFields();
     }
 
     public void bconsul(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Affichecat.fxml"));
+
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("Affichecat.fxml"));
             Parent root = loader.load();
 
-            // Récupérer la fenêtre actuelle
+            // Rï¿½cupï¿½rer la fenï¿½tre actuelle
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Changer la scène
+            // Changer la scï¿½ne
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {

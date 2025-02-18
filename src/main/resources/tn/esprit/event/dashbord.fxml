@@ -5,16 +5,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.event.Dashbord">
-   <children>
-      <VBox layoutX="114.0" layoutY="25.0" prefHeight="350.0" prefWidth="371.0" spacing="50">
-
-         <children>
-            <Label alignment="CENTER" prefHeight="56.0" prefWidth="370.0" style="-fx-font-size: 24; -fx-font-weight: bold;" text="Espace Organisateur" />
-             <Button style="         -fx-background-color: #F28C28;         -fx-text-fill: #FFFFFF;         -fx-font-size: 18px;         -fx-font-weight: bold;         -fx-text-transform: uppercase;         -fx-border-radius: 5;         -fx-background-radius: 5;         -fx-min-width: 100%;         -fx-max-width: Infinity;         -fx-padding: 15 30;     " text="Creation Event" />
-             <Button style="         -fx-background-color: #F28C28;         -fx-text-fill: #FFFFFF;         -fx-font-size: 18px;         -fx-font-weight: bold;         -fx-text-transform: uppercase;         -fx-border-radius: 5;         -fx-background-radius: 5;         -fx-min-width: 100%;         -fx-max-width: Infinity;         -fx-padding: 15 30;     " text="Consulter Event" />
-
-         </children>
-      </VBox>
-   </children>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.event.controller.Dashbord">
+    <children>
+        <VBox layoutX="114.0" layoutY="25.0" prefHeight="350.0" prefWidth="371.0" spacing="50">
+            <children>
+                <Label alignment="CENTER" prefHeight="56.0" prefWidth="370.0" style="-fx-font-size: 24; -fx-font-weight: bold;" text="Espace Organisateur" />
+                <Button fx:id="creationEventButton" onAction="#handleCreationEvent" style="-fx-background-color: #F28C28; -fx-text-fill: #FFFFFF; -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-transform: uppercase; -fx-border-radius: 5; -fx-background-radius: 5; -fx-min-width: 100%; -fx-max-width: Infinity; -fx-padding: 15 30;" text="Creation Event" />
+                <Button fx:id="consulterEventButton" onAction="#handleConsulterEvent" style="-fx-background-color: #F28C28; -fx-text-fill: #FFFFFF; -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-transform: uppercase; -fx-border-radius: 5; -fx-background-radius: 5; -fx-min-width: 100%; -fx-max-width: Infinity; -fx-padding: 15 30;" text="Consulter Event" />
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>

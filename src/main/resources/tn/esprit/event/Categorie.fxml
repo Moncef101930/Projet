@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="383.0" prefWidth="611.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CategorieController">
+<AnchorPane prefHeight="383.0" prefWidth="611.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.event.controller.CategorieController">
    <children>
       <TextField fx:id="Nom" layoutX="231.0" layoutY="133.0" />
       <TextField fx:id="Description" layoutX="231.0" layoutY="211.0" />

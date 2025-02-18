@@ -1,20 +1,21 @@
-package Service;
+package tn.esprit.event.service;
 
-import entite.Categorie;
-import utile.DataSource;
+
+import tn.esprit.event.entity.Categorie;
+import tn.esprit.event.utils.MyConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategorieService implements Iservice<Categorie> {
+public class CategorieService implements Iservice2<Categorie> {
     private Statement statement;
     private ResultSet resultSet;
     private PreparedStatement preparedStatement;
     private Connection con;
 
     public CategorieService() {
-        con = DataSource.getInstance().getConnection();
+        con = MyConnection.getInstance().getCnx();
     }
 
     @Override
