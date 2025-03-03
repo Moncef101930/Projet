@@ -3,6 +3,7 @@ module tn.esprit.event {
     requires javafx.fxml;
     requires java.sql;
     requires jakarta.mail;
+    requires jbcrypt;
 
 
     opens tn.esprit.event.controller to javafx.fxml;

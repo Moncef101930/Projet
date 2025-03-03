@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import tn.esprit.event.MainFX;
 import tn.esprit.event.entity.Utilisateur;
 import tn.esprit.event.service.ServiceUtilisateur;
+import tn.esprit.event.utils.BCryptPass;
 import tn.esprit.event.utils.EmailSender;
 
 import java.util.Random;
@@ -91,7 +92,8 @@ public class ForgotPassword {
             messageLabel.setText("Passwords do not match.");
             return;
         }
-        boolean updated = serviceUtilisateur.updatePasswordByEmail(emailField.getText().trim(), newPassword);
+        String hashedPassword = BCryptPass.hashPass(newPassword);
+        boolean updated = serviceUtilisateur.updatePasswordByEmail(emailField.getText().trim(), hashedPassword);
         if (updated) {
             messageLabel.setStyle("-fx-text-fill: green;");
             messageLabel.setText("Password reset successful.");

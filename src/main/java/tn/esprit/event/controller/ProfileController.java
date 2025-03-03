@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import tn.esprit.event.MainFX;
 import tn.esprit.event.entity.Utilisateur;
 import tn.esprit.event.service.ServiceUtilisateur;
+import tn.esprit.event.utils.BCryptPass;
 import tn.esprit.event.utils.Session;
 
 import java.time.LocalDate;
@@ -47,7 +48,7 @@ public class ProfileController {
             nomField.setText(currentUser.getNom());
             prenomField.setText(currentUser.getPrenom());
             emailField.setText(currentUser.getEmail());
-            passwordField.setText(currentUser.getMot_de_passe());
+           // passwordField.setText(currentUser.getMot_de_passe());
             dateNaissancePicker.setValue(currentUser.getDate_naissance());
             bioField.setText(currentUser.getBio());
             imageField.setText(currentUser.getImage());
@@ -62,7 +63,9 @@ public class ProfileController {
         }
         currentUser.setNom(nomField.getText());
         currentUser.setPrenom(prenomField.getText());
-        currentUser.setMot_de_passe(passwordField.getText());
+        if (!passwordField.getText().trim().isEmpty()) {
+            currentUser.setMot_de_passe(BCryptPass.hashPass(passwordField.getText()));
+        }
         currentUser.setDate_naissance(dateNaissancePicker.getValue());
         currentUser.setBio(bioField.getText());
         currentUser.setImage(imageField.getText());
@@ -81,9 +84,7 @@ public class ProfileController {
         if(emailField.getText() == null || emailField.getText().trim().isEmpty()){
             errors += "Email vide\n";
         }
-        if(passwordField.getText() == null || passwordField.getText().trim().isEmpty()){
-            errors += "Mot de passe vide\n";
-        }
+
         if(dateNaissancePicker.getValue() == null){
             errors += "Date de naissance vide\n";
         } else if (ChronoUnit.YEARS.between(dateNaissancePicker.getValue(), LocalDate.now())<12) {
@@ -95,9 +96,6 @@ public class ProfileController {
         }
         if(prenomField.getText() != null && prenomField.getText().length() < 3){
             errors += "Prénom doit contenir au moins 3 caractères\n";
-        }
-        if(passwordField.getText() != null && passwordField.getText().length() < 6){
-            errors += "Mot de passe doit contenir au moins 6 caractères\n";
         }
 
         if(!errors.isEmpty()){

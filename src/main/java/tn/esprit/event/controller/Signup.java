@@ -11,6 +11,7 @@ import tn.esprit.event.MainFX;
 import tn.esprit.event.entity.Role;
 import tn.esprit.event.entity.Utilisateur;
 import tn.esprit.event.service.ServiceUtilisateur;
+import tn.esprit.event.utils.BCryptPass;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -60,13 +61,14 @@ public class Signup {
         String prenom = prenomField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
+        String hashedPassword = BCryptPass.hashPass(password);
         LocalDate dateNaissance = dateNaissancePicker.getValue();
         String bio = bioField.getText();
         String image = imageField.getText();
 
 
 
-        Utilisateur user = new Utilisateur(nom, prenom, email, password, roleComboBox.getValue(), dateNaissance, bio, image);
+        Utilisateur user = new Utilisateur(nom, prenom, email, hashedPassword, roleComboBox.getValue(), dateNaissance, bio, image);
         serviceUtilisateur.ajouter(user);
         errorLabel.setText("Signup successful! Redirecting to login...");
 

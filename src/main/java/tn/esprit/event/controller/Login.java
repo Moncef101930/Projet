@@ -11,6 +11,7 @@ import tn.esprit.event.MainFX;
 import tn.esprit.event.entity.Role;
 import tn.esprit.event.entity.Utilisateur;
 import tn.esprit.event.service.ServiceUtilisateur;
+import tn.esprit.event.utils.BCryptPass;
 import tn.esprit.event.utils.Session;
 
 public class Login {
@@ -35,8 +36,8 @@ public class Login {
             errorLabel.setText("Please fill in all fields.");
             return;
         }
-        Utilisateur user = serviceUtilisateur.login(email, password);
-        if(user != null){
+        Utilisateur user = serviceUtilisateur.findByEmail(email);
+        if(user != null && BCryptPass.checkPass(password, user.getMot_de_passe())){
             errorLabel.setText("Login successful!");
             try {
                 Stage stage = (Stage)((Button) event.getSource()).getScene().getWindow();

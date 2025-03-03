@@ -14,6 +14,7 @@ import tn.esprit.event.MainFX;
 import tn.esprit.event.entity.Role;
 import tn.esprit.event.entity.Utilisateur;
 import tn.esprit.event.service.ServiceUtilisateur;
+import tn.esprit.event.utils.BCryptPass;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -68,9 +69,9 @@ public class AdminAddUser {
         LocalDate dateNaissance = dateNaissancePicker.getValue();
         String bio = bioField.getText();
         String image = imageField.getText();
-
+        String hashedPassword = BCryptPass.hashPass(password);
         if (selectedUser == null) {
-            Utilisateur newUser = new Utilisateur(nom, prenom, email, password, role, dateNaissance, bio, image);
+            Utilisateur newUser = new Utilisateur(nom, prenom, email, hashedPassword, role, dateNaissance, bio, image);
             service.ajouter(newUser);
             formMessage.setText("User added successfully.");
         } else {
