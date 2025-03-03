@@ -1,0 +1,73 @@
+/* Couleurs principales */
+.root {
+    /* Couleur de fond globale */
+    -fx-background-color: #000000;  /* Noir */
+    -fx-text-fill: #FFFFFF;         /* Texte en blanc par défaut */
+}
+
+/* Barre de navigation */
+.navBar {
+    -fx-padding: 20;
+    -fx-background-color: #000000;
+    /* éventuellement une légère bordure en bas */
+}
+
+.navLogo {
+    -fx-text-fill: #FF8C00; /* Orange */
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.navItem {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+/* Partie centrale */
+.mainContent {
+    -fx-alignment: center;
+    -fx-padding: 50;
+}
+
+.imageContainer {
+    /* Permet de superposer un overlay semi-transparent, par exemple */
+    -fx-background-color: rgba(255,140,0,0.2); /* un voile orangé */
+    -fx-alignment: center;
+}
+
+.textContainer {
+    -fx-alignment: top-left;
+    -fx-padding: 20;
+    -fx-max-width: 400;
+}
+
+.mainTitle {
+    -fx-text-fill: #FF8C00;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+}
+
+.description {
+    -fx-text-fill: #FFFFFF;
+    -fx-wrap-text: true;
+    -fx-font-size: 16px;
+}
+
+.actionButton {
+    -fx-background-color: #FF8C00;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.socialContainer {
+    -fx-padding: 20 0 0 0; /* marge en haut */
+}
+
+.socialIcon {
+    -fx-text-fill: #FF8C00;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+}

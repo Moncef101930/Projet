@@ -2,12 +2,20 @@ package tn.esprit.event.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import tn.esprit.event.MainFX;
 import tn.esprit.event.entity.Utilisateur;
 import tn.esprit.event.service.ServiceUtilisateur;
 import tn.esprit.event.utils.Session;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 
 public class ProfileController {
@@ -78,6 +86,9 @@ public class ProfileController {
         }
         if(dateNaissancePicker.getValue() == null){
             errors += "Date de naissance vide\n";
+        } else if (ChronoUnit.YEARS.between(dateNaissancePicker.getValue(), LocalDate.now())<12) {
+            errors += "L'utilisateur doit avoir au moins 12ans\n";
+
         }
         if(nomField.getText() != null && nomField.getText().length() < 3){
             errors += "Nom doit contenir au moins 3 caractères\n";
@@ -98,5 +109,19 @@ public class ProfileController {
             return false;
         }
         return true;
+    }
+
+    public void gotoLoginn(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("login.fxml"));
+
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

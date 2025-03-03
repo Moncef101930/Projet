@@ -35,7 +35,6 @@ public class Login {
             errorLabel.setText("Please fill in all fields.");
             return;
         }
-
         Utilisateur user = serviceUtilisateur.login(email, password);
         if(user != null){
             errorLabel.setText("Login successful!");
@@ -65,6 +64,19 @@ public class Login {
     private void goToSignup(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("signup.fxml"));
+
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Hyperlink) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void goToForgot(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("forgot-password.fxml"));
 
             Parent root = loader.load();
             Stage stage = (Stage) ((Hyperlink) event.getSource()).getScene().getWindow();

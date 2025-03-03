@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="611.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.event.controller.Login">
+<AnchorPane prefHeight="400.0" prefWidth="611.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.event.controller.Login">
     <children>
         <VBox alignment="CENTER" layoutX="150" layoutY="50" spacing="10.0">
             <children>
@@ -18,6 +18,7 @@
                 <Button onAction="#handleLogin" prefWidth="300" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;" text="Login" />
                 <Hyperlink onAction="#goToSignup" style="-fx-text-fill: #3f51b5;" text="Don't have an account? Signup" />
                 <Label fx:id="errorLabel" textFill="red" />
+            <Hyperlink onAction="#goToForgot" style="-fx-text-fill: #3f51b5;" text="Forgot password?" />
             </children>
         </VBox>
     </children>

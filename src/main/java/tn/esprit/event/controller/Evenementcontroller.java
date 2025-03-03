@@ -1,7 +1,6 @@
 package tn.esprit.event.controller;
 
 
-import entite.Evenements;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +13,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import tn.esprit.event.MainFX;
+import tn.esprit.event.entity.Evenements;
 import tn.esprit.event.service.EvenementService;
 
 import java.io.IOException;

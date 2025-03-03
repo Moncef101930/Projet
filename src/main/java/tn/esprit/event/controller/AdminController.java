@@ -2,17 +2,31 @@ package tn.esprit.event.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import tn.esprit.event.MainFX;
 import tn.esprit.event.entity.Role;
 import tn.esprit.event.entity.Utilisateur;
 import tn.esprit.event.service.ServiceUtilisateur;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class AdminController {
 
@@ -30,27 +44,12 @@ public class AdminController {
     private TableColumn<Utilisateur, Void> actionsColumn;
 
     @FXML
-    private TextField nomField;
+    private ComboBox<String> cbtri;
     @FXML
-    private TextField prenomField;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private ComboBox<String> roleComboBox;
-    @FXML
-    private DatePicker dateNaissancePicker;
-    @FXML
-    private TextField bioField;
-    @FXML
-    private TextField imageField;
-    @FXML
-    private Label formMessage;
+    private TextField tfrecherche;
 
     private ServiceUtilisateur service = new ServiceUtilisateur();
-    private ObservableList<Utilisateur> userList;
-    private Utilisateur selectedUser = null;
+    private ObservableList<Utilisateur> data; // full user data list
 
     @FXML
     public void initialize() {
@@ -58,30 +57,39 @@ public class AdminController {
         prenomColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
-        roleComboBox.setItems(FXCollections.observableArrayList("ADMIN", "USER","ORGANISATEUR"));
-        userList = FXCollections.observableArrayList(service.afficher());
-        userTable.setItems(userList);
-        addActionsToTable();
-        roleComboBox.setItems(FXCollections.observableArrayList("ADMIN", "USER"));
 
+        // Load data from the service
+        data = FXCollections.observableArrayList(service.afficher());
+        userTable.setItems(data);
+        cbtri.setItems(FXCollections.observableArrayList("Nom", "Prenom", "Email", "Role", "Date Naissance"));
+
+        // Initialize actions (Edit/Delete) in the table
+        addActionsToTable();
+
+        // Set up advanced search and sort listeners
+        recherche_avance();
+        addSortListener();
     }
 
     private void addActionsToTable() {
         actionsColumn.setCellFactory(col -> new TableCell<Utilisateur, Void>() {
             private final Button deleteButton = new Button("Delete");
             private final Button editButton = new Button("Edit");
+
             {
                 deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
                 editButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
+
                 deleteButton.setOnAction(event -> {
                     Utilisateur user = getTableView().getItems().get(getIndex());
                     handleDeleteUser(user);
                 });
                 editButton.setOnAction(event -> {
                     Utilisateur user = getTableView().getItems().get(getIndex());
-                    populateForm(user);
+                    handleEditUser(user, event);
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -95,50 +103,31 @@ public class AdminController {
         });
     }
 
-    private void populateForm(Utilisateur user) {
-        selectedUser = user;
-        nomField.setText(user.getNom());
-        prenomField.setText(user.getPrenom());
-        emailField.setText(user.getEmail());
-        passwordField.setText(user.getMot_de_passe());
-        roleComboBox.setValue(user.getRole().name());
-        dateNaissancePicker.setValue(user.getDate_naissance());
-        bioField.setText(user.getBio());
-        imageField.setText(user.getImage());
+    private void handleEditUser(Utilisateur user, ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("admin-add-user.fxml"));
+            Parent root = loader.load();
+            AdminAddUser addUserController = loader.getController();
+            addUserController.populateForm(user);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    private void handleSaveUser(ActionEvent event) {
-        if (!controleSaisieAdmin()) {
-            return;
+    private void gotoAjouter(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("admin-add-user.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        String nom = nomField.getText();
-        String prenom = prenomField.getText();
-        String email = emailField.getText();
-        String password = passwordField.getText();
-        Role role = Role.valueOf(roleComboBox.getValue());
-        LocalDate dateNaissance = dateNaissancePicker.getValue();
-        String bio = bioField.getText();
-        String image = imageField.getText();
-
-        if (selectedUser == null) {
-            Utilisateur newUser = new Utilisateur(nom, prenom, email, password, role, dateNaissance, bio, image);
-            service.ajouter(newUser);
-            formMessage.setText("User added successfully.");
-        } else {
-            selectedUser.setNom(nom);
-            selectedUser.setPrenom(prenom);
-            selectedUser.setEmail(email);
-            selectedUser.setMot_de_passe(password);
-            selectedUser.setRole(role);
-            selectedUser.setDate_naissance(dateNaissance);
-            selectedUser.setBio(bio);
-            selectedUser.setImage(image);
-            service.modifier(selectedUser.getId().intValue(), selectedUser);
-            formMessage.setText("User updated successfully.");
-        }
-        refreshUserTable();
-        clearForm();
     }
 
     private void handleDeleteUser(Utilisateur user) {
@@ -154,59 +143,104 @@ public class AdminController {
     }
 
     private void refreshUserTable() {
-        userList.setAll(service.afficher());
+        data.setAll(service.afficher());
+        userTable.refresh();
     }
 
-    private void clearForm() {
-        selectedUser = null;
-        nomField.clear();
-        prenomField.clear();
-        emailField.clear();
-        passwordField.clear();
-        roleComboBox.setValue(null);
-        dateNaissancePicker.setValue(null);
-        bioField.clear();
-        imageField.clear();
+    @FXML
+    void gotoLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("login.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
-    private boolean controleSaisieAdmin() {
-        String errors = "";
-        if(nomField.getText() == null || nomField.getText().trim().isEmpty()){
-            errors += "Nom vide\n";
-        }
-        if(prenomField.getText() == null || prenomField.getText().trim().isEmpty()){
-            errors += "Prénom vide\n";
-        }
-        if(emailField.getText() == null || emailField.getText().trim().isEmpty()){
-            errors += "Email vide\n";
-        }
-        if(passwordField.getText() == null || passwordField.getText().trim().isEmpty()){
-            errors += "Mot de passe vide\n";
-        }
-        if(roleComboBox.getValue() == null){
-            errors += "Role non sélectionné\n";
-        }
-        if(dateNaissancePicker.getValue() == null){
-            errors += "Date de naissance vide\n";
-        }
-        // Minimal length checks (optional)
-        if(nomField.getText() != null && nomField.getText().length() < 3){
-            errors += "Nom doit contenir au moins 3 caractères\n";
-        }
-        if(prenomField.getText() != null && prenomField.getText().length() < 3){
-            errors += "Prénom doit contenir au moins 3 caractères\n";
-        }
-        if(passwordField.getText() != null && passwordField.getText().length() < 6){
-            errors += "Mot de passe doit contenir au moins 6 caractères\n";
-        }
 
-        if(!errors.isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur de saisie");
-            alert.setHeaderText("Veuillez corriger les erreurs");
-            alert.setContentText(errors);
-            alert.showAndWait();
-            return false;
+    // Advanced search method
+    public void recherche_avance() {
+        // Create a FilteredList based on the full data list
+        FilteredList<Utilisateur> filteredData = new FilteredList<>(data, u -> true);
+
+        tfrecherche.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(utilisateur -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                // You can add additional fields as needed.
+                if (utilisateur.getNom().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (utilisateur.getPrenom().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (utilisateur.getEmail().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (String.valueOf(utilisateur.getDate_naissance()).contains(lowerCaseFilter)) {
+                    return true;
+                } else if (utilisateur.getRole().toString().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+            userTable.setItems(filteredData);
+        });
+    }
+
+    // Sorting listener on the ComboBox using switch-case and Java streams
+    private void addSortListener() {
+        cbtri.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                List<Utilisateur> sortedList = new ArrayList<>();
+                switch (newValue) {
+                    case "Nom":
+                        sortedList = data.stream().sorted((u1, u2) -> {
+                            return u1.getNom().compareToIgnoreCase(u2.getNom());
+                        }).collect(Collectors.toList());
+                        break;
+                    case "Prenom":
+                        sortedList = data.stream().sorted((u1, u2) -> {
+                            return u1.getPrenom().compareToIgnoreCase(u2.getPrenom());
+                        }).collect(Collectors.toList());
+                        break;
+                    case "Email":
+                        sortedList = data.stream().sorted((u1, u2) -> {
+                            return u1.getEmail().compareToIgnoreCase(u2.getEmail());
+                        }).collect(Collectors.toList());
+                        break;
+                    case "Role":
+                        sortedList = data.stream().sorted((u1, u2) -> {
+                            return u1.getRole().toString().compareToIgnoreCase(u2.getRole().toString());
+                        }).collect(Collectors.toList());
+                        break;
+                    case "Date Naissance":
+                        sortedList = data.stream().sorted((u1, u2) -> {
+                            return u1.getDate_naissance().compareTo(u2.getDate_naissance());
+                        }).collect(Collectors.toList());
+                        break;
+                    default:
+                        sortedList = new ArrayList<>(data);
+                        break;
+                }
+                data.setAll(sortedList);
+                userTable.refresh();
+            }
+        });
+    }
+
+    @FXML
+    void gotoStat(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("stat-user.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        return true;
     }
 }

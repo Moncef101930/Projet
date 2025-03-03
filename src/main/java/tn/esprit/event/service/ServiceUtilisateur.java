@@ -4,10 +4,7 @@ import tn.esprit.event.entity.Role;
 import tn.esprit.event.entity.Utilisateur;
 import tn.esprit.event.utils.MyConnection;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,5 +105,22 @@ public class ServiceUtilisateur implements IService<Utilisateur>{
             System.out.println(e.getMessage());
         }
         return user;
+    }
+    public Utilisateur findByEmail(String email) {
+        return afficher().stream().filter(u->u.getEmail().equals(email)).findFirst().orElse(null);
+    }
+    public boolean updatePasswordByEmail(String email, String newPassword) {
+        String query = "UPDATE utilisateur SET mot_de_passe = ? WHERE email = ?";
+        try (
+             PreparedStatement ps = cnx.prepareStatement(query)) {
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

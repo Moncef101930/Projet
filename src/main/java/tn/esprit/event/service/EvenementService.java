@@ -1,6 +1,7 @@
 package tn.esprit.event.service;
 
-import entite.Evenements;
+
+import tn.esprit.event.entity.Evenements;
 import tn.esprit.event.utils.MyConnection;
 
 

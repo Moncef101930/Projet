@@ -1,13 +1,20 @@
 package tn.esprit.event.controller;
 
 
-import entite.Evenements;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import tn.esprit.event.MainFX;
+import tn.esprit.event.entity.Evenements;
 import tn.esprit.event.service.EvenementService;
 
 import java.sql.*;
@@ -48,4 +55,18 @@ public class AffichageEvent {
         column4.setCellValueFactory(new PropertyValueFactory<>("dateEvenement"));
         column5.setCellValueFactory(new PropertyValueFactory<>("lieu"));
     }
-}
+
+    public void logg(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("dashbord.fxml"));
+
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    }
