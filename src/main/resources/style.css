@@ -1,0 +1,9 @@
+.sidepanneaux{
+    -fx-background-color: #fdfd96; /* Couleur de fond */
+    -fx-border-color: #333; /* Couleur de la bordure */
+    -fx-border-width: 2px 2px 2px 2px; /* Largeur de la bordure */
+    -fx-border-radius: 0px; /* Rayon de la bordure */
+    -fx-background-radius: 0px;
+    -fx-border-style: solid; /* Style de la bordure */
+}
+

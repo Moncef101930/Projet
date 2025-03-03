@@ -5,6 +5,11 @@ public class Categorie {
     private String nom ;
     private String description ;
 
+    public Categorie(String categorieStr) {
+        this.nom = categorieStr ;
+    }
+
+
     public int getId() {
         return id;
     }

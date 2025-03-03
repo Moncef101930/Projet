@@ -18,18 +18,14 @@ import java.io.IOException;
 public class CategorieController {
 
     @FXML
-    private TextField Description;
+    private TextField description;
 
     @FXML
-    private TextField Nom;
+    private TextField nom;
 
     @FXML
     private Button create;
 
-    @FXML
-    private Button supprimer;
-    @FXML
-    private Button create1;
     @FXML
     private Button consu;
 
@@ -41,64 +37,73 @@ public class CategorieController {
 
     @FXML
     void bcreate(ActionEvent event) {
-        String nom = Nom.getText().trim();
-        String description = Description.getText().trim();
+        if (nom == null || description == null) {
+            showAlert("Erreur", "Problème d'initialisation des champs. Vérifiez votre fichier FXML.");
+            return;
+        }
 
-        if (nom.isEmpty() || description.isEmpty()) {
+        String nomText = nom.getText().trim();
+        String descriptionText = description.getText().trim();
+
+        if (nomText.isEmpty() || descriptionText.isEmpty()) {
             showAlert("Erreur", "Le nom et la description ne peuvent pas être vides !");
             return;
         }
 
-        Categorie c1 = new Categorie(nom, description);
-        cs.add(c1);
-        showAlert("Succès", "Catégorie ajoutée avec succès !");
-        clearFields();
+        try {
+            // Vérifier si la catégorie existe déjà
+            boolean categoryExists = cs.getAll().stream()
+                    .anyMatch(c -> c.getNom().equalsIgnoreCase(nomText));
+
+            if (categoryExists) {
+                showAlert("Erreur", "Une catégorie avec ce nom existe déjà !");
+                return;
+            }
+
+            // Ajouter la catégorie
+            Categorie c1 = new Categorie(nomText, descriptionText);
+            cs.add(c1);
+
+            showAlert("Succès", "Catégorie ajoutée avec succès !");
+            clearFields();
+        } catch (Exception e) {
+            showAlert("Erreur", "Une erreur est survenue lors de l'ajout de la catégorie.");
+            e.printStackTrace(); // Pour le débogage
+        }
     }
 
     @FXML
     void bsupprim(ActionEvent event) {
-        String nom = Nom.getText().trim();
-        String description = Description.getText().trim();
+        if (nom == null || description == null) {
+            showAlert("Erreur", "Problème d'initialisation des champs. Vérifiez votre fichier FXML.");
+            return;
+        }
 
-        if (nom.isEmpty() || description.isEmpty()) {
+        String nomText = nom.getText().trim();
+        String descriptionText = description.getText().trim();
+
+        if (nomText.isEmpty() || descriptionText.isEmpty()) {
             showAlert("Erreur", "Veuillez remplir tous les champs !");
             return;
         }
 
-        Categorie c1 = new Categorie(nom, description);
-        cs.delete(c1);
-        showAlert("Succès", "Catégorie supprimée avec succès !");
-        clearFields();
+        try {
+            Categorie c1 = new Categorie(nomText, descriptionText);
+            boolean deleted = cs.delete(c1);
+
+            if (deleted) {
+                showAlert("Succès", "Catégorie supprimée avec succès !");
+                clearFields();
+            } else {
+                showAlert("Erreur", "Échec de la suppression. La catégorie n'existe peut-être pas.");
+            }
+        } catch (Exception e) {
+            showAlert("Erreur", "Une erreur est survenue lors de la suppression.");
+            e.printStackTrace();
+        }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void clearFields() {
-        Nom.clear();
-        Description.clear();
-    }
     @FXML
-    public void ucreate(ActionEvent event) {
-        String nom1 = Nom.getText().trim();
-        String description = Description.getText().trim();
-
-        if (nom1.isEmpty() || description.isEmpty()) {
-            showAlert("Erreur", "Veuillez remplir tous les champs !");
-            return;
-        }
-
-        Categorie c1 = new Categorie(nom1, description);
-        cs.update(c1);
-        showAlert("Succès", "Catégorie modifiée avec succès !");
-        clearFields();
-    }
-
     public void bconsul(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Affichecat.fxml"));
@@ -112,9 +117,20 @@ public class CategorieController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace(); // Afficher l'erreur dans la console
+            showAlert("Erreur", "Impossible de charger l'affichage des catégories.");
         }
     }
 
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
-
+    private void clearFields() {
+        if (nom != null) nom.clear();
+        if (description != null) description.clear();
+    }
 }

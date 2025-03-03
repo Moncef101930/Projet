@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Controllerevent">
+    <TableView fx:id="eventTable" layoutX="14.0" layoutY="22.0" prefHeight="256.0" prefWidth="421.0">
+        <columns>
+            <TableColumn fx:id="nomColumn" prefWidth="100.0" text="Nom" />
+            <TableColumn fx:id="descriptionColumn" prefWidth="150.0" text="Description" />
+            <TableColumn fx:id="dateColumn" prefWidth="100.0" text="Date" />
+            <TableColumn fx:id="lieuColumn" prefWidth="100.0" text="Lieu" />
+        </columns>
+    </TableView>
+    <Button fx:id="ajout" layoutX="32.0" layoutY="336.0" prefHeight="32.0" prefWidth="164.0" style="-fx-background-color: #333cff;" text="Ajout-categorie" />
+   <Button fx:id="metier" layoutX="344.0" layoutY="336.0" prefHeight="32.0" prefWidth="128.0" style="-fx-background-color: #ff3349;" text="recherche" />
+
+
+</AnchorPane>

@@ -9,7 +9,7 @@ public class DataSource {
     private Connection connection;
     private static DataSource instance;
 
-    public DataSource(){
+    private DataSource(){
         try{
             connection = DriverManager.getConnection(url,user,password);
 

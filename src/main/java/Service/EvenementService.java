@@ -1,6 +1,7 @@
 package Service;
 
 import entite.Evenements;
+import javafx.scene.control.Alert;
 import utile.DataSource;
 
 import java.sql.*;
@@ -31,7 +32,7 @@ public class EvenementService implements Iservice<Evenements> {
         }
     }
 
-    public void delete(Evenements evenements) {
+    public boolean delete(Evenements evenements) {
         String requete = "DELETE FROM événements WHERE nom = ?";
 
         try (PreparedStatement pst = con.prepareStatement(requete)) {
@@ -40,16 +41,20 @@ public class EvenementService implements Iservice<Evenements> {
 
             if (rowsAffected > 0) {
                 System.out.println("Événement supprimé avec succès.");
+                return true;
             } else {
                 System.out.println("Aucun événement trouvé avec le nom : " + evenements.getNomEvenement());
+                return false;
             }
+
         } catch (SQLException e) {
             throw new RuntimeException("Erreur lors de la suppression de l'événement : " + e.getMessage(), e);
         }
+
     }
 
     @Override
-    public void update(Evenements evenements) {
+    public boolean update(Evenements evenements) {
         String requete = "UPDATE événements SET lieu = ?, description = ?, date = ? WHERE nom = ?";
 
         try (PreparedStatement pst = con.prepareStatement(requete)) {
@@ -63,11 +68,12 @@ public class EvenementService implements Iservice<Evenements> {
             if (rowsAffected > 0) {
                 System.out.println("Événement mis à jour avec succès.");
             } else {
-                System.out.println("Aucun événement trouvé avec le nom : " + evenements.getNomEvenement());
+                showAlert("Erreur", "pas des evenements avec ce nom : ");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erreur lors de la mise à jour de l'événement : " + e.getMessage(), e);
+            showAlert("Erreur", "Échec de la mise à jour : " + e.getMessage());
         }
+        return false;
     }
 
     @Override
@@ -121,5 +127,13 @@ public class EvenementService implements Iservice<Evenements> {
     @Override
     public boolean nomExiste(String nom1) {
         return false;
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.update">
+   <children>
+      <HBox prefHeight="82.0" prefWidth="602.0">
+         <children>
+            <AnchorPane prefHeight="82.0" prefWidth="606.0" styleClass="sidepanneaux" stylesheets="@style.css">
+               <children>
+                  <Label layoutX="139.0" layoutY="15.0" prefHeight="52.0" prefWidth="323.0" text="Mise a jour-Catégorie">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+      <Label layoutX="46.0" layoutY="131.0" prefHeight="40.0" prefWidth="61.0" text="Nom">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="36.0" layoutY="215.0" prefHeight="40.0" prefWidth="103.0" text="Description">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="field1" layoutX="186.0" layoutY="138.0" />
+      <TextField fx:id="field2" layoutX="186.0" layoutY="222.0" />
+      <Button fx:id="validerButton" layoutX="250.0" layoutY="297.0" prefHeight="60.0" prefWidth="66.0" style="-fx-background-color: orange; -fx-background-radius: 30; -fx-text-fill: white;" text="✓">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

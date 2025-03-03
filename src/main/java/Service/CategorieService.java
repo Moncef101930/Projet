@@ -31,41 +31,51 @@ public class CategorieService implements Iservice<Categorie> {
         }
     }
 
-    public void delete(Categorie categorie) {
-        String requete = "delete from categorie where nom='" + categorie.getNom() + "'";
-        try {
-            statement = con.createStatement();
-            statement.executeUpdate(requete);
-            System.out.println("Categorie supprime");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public boolean delete(Categorie categorie) {
+        String requete = "DELETE FROM categorie WHERE nom = ?";
 
+        try (PreparedStatement preparedStatement = con.prepareStatement(requete)) {
+            preparedStatement.setString(1, categorie.getNom());
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Catégorie supprimée avec succès.");
+                return true;
+            } else {
+                System.out.println("Aucune catégorie trouvée avec ce nom.");
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de la suppression de la catégorie", e);
+        }
     }
 
     @Override
-    public void update(Categorie categorie) {
-        String requete = "UPDATE categorie SET description= ?,nom= ? WHERE nom = ?";
+    public boolean update(Categorie categorie) {
+        String requete = "UPDATE categorie SET description = ?, nom = ? WHERE nom = ?";
 
-        // Use try-with-resources to automatically close PreparedStatement
         try (PreparedStatement pst = con.prepareStatement(requete)) {
             // Set parameters in the correct order
-            pst.setString(1, categorie.getDescription()); // First parameter (SET description = ?)
+            pst.setString(1, categorie.getDescription());
             pst.setString(2, categorie.getNom());
-            pst.setString(3, categorie.getNom()); // Second parameter (WHERE nom = ?)
+            pst.setString(3, categorie.getNom()); // Vérifie si l'ancien nom existe
 
             // Execute the update and check affected rows
             int rowsAffected = pst.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("Categorie updated successfully.");
+                System.out.println("Catégorie mise à jour avec succès.");
+                return true;
             } else {
-                System.out.println("No categorie found with name " + categorie.getNom());
+                System.out.println("Aucune catégorie trouvée avec le nom : " + categorie.getNom());
+                return false;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating categorie", e);
+            throw new RuntimeException("Erreur lors de la mise à jour de la catégorie", e);
         }
     }
+
     @Override
     public List<Categorie> getAll() {
         List<Categorie> cat = new ArrayList<>();
@@ -84,7 +94,7 @@ public class CategorieService implements Iservice<Categorie> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return cat;  // Return the correct list
+        return cat;
     }
 
     @Override
@@ -95,7 +105,25 @@ public class CategorieService implements Iservice<Categorie> {
     @Override
     public Categorie get(int id) {
         return null;
+    }
 
+    public Categorie getByName(String nom) {
+        String requete = "SELECT * FROM categorie WHERE nom = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(requete)) {
+            preparedStatement.setString(1, nom);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Categorie(
+                            resultSet.getInt("id"),
+                            resultSet.getString("nom"),
+                            resultSet.getString("description")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erreur lors de la récupération de la catégorie par nom", e);
+        }
+        return null; // Retourne null si aucune catégorie n'est trouvée
     }
 
 }

@@ -45,6 +45,11 @@ public class Evenementcontroller {
             showAlert("Erreur", "Tous les champs doivent être remplis !");
             return;
         }
+        if (date.isBefore(LocalDate.now())) {
+            showAlert("erreur","La date doit être après la date actuelle !");
+            return;
+        }
+
 
         Evenements evente = new Evenements(nom, description, lieu, date);
 
@@ -120,7 +125,7 @@ public class Evenementcontroller {
         @FXML
         void goToNextPage(ActionEvent event)  {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvent.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Affichageivent.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
