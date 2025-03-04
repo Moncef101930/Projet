@@ -94,37 +94,47 @@ public class AjouterCatController {
             return;
         }
 
-        System.out.println("Selected Event: " + selectedEvent);
-        System.out.println("Selected Category: " + selectedCategory);
-
         EventCatService eventCatService = new EventCatService();
-        EventCat eventCat = new EventCat(selectedEvent, selectedCategory);
-        System.out.println(eventCat);
 
-        try {
+        // Vérification si l'événement est déjà associé à une catégorie
+        if (eventCatService.eventAlreadyInCategory(selectedEvent.getIdEvenement(), selectedCategory.getId())) {
+            showAlert("Erreur", "Cet événement est déjà associé à cette catégorie !");
+            return;
+        }
+
+        // Vérifier si l'événement a déjà une catégorie
+        EventCat existingEventCat = eventCatService.getByEventId(selectedEvent.getIdEvenement());
+
+        if (existingEventCat != null) {
+            // Mise à jour de la catégorie existante
+            existingEventCat.setCategorie1(selectedCategory);
+            eventCatService.update(existingEventCat);
+            showAlert("Succès", "La catégorie de l'événement a été mise à jour avec succès.");
+        } else {
+            // Ajout de l'association si elle n'existe pas encore
+            EventCat eventCat = new EventCat(selectedEvent, selectedCategory);
             eventCatService.add(eventCat);
             showAlert("Succès", "L'événement a été associé à la catégorie avec succès.");
-            try {
-                // Charger la nouvelle page
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventCatAffichage.fxml"));
-                Parent root = loader.load();
+        }
 
-                // Obtenir la scène actuelle
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                Scene scene = new Scene(root);
+        // Charger la nouvelle page après l'ajout ou la mise à jour
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventCatAffichage.fxml"));
+            Parent root = loader.load();
 
-                // Changer de scène
-                stage.setScene(scene);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                showAlert("Erreur", "Impossible d'ouvrir la page d'affichage.");
-            }
+            // Obtenir la scène actuelle
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
 
-        } catch (IllegalArgumentException e) {
-            showAlert("Erreur", "Impossible d'associer l'événement à la catégorie : " + e.getMessage());
+            // Changer de scène
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir la page d'affichage.");
         }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

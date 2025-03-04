@@ -14,8 +14,7 @@
             <TableColumn fx:id="lieuColumn" prefWidth="100.0" text="Lieu" />
         </columns>
     </TableView>
-    <Button fx:id="ajout" layoutX="32.0" layoutY="336.0" prefHeight="32.0" prefWidth="164.0" style="-fx-background-color: #333cff;" text="Ajout-categorie" />
-   <Button fx:id="metier" layoutX="344.0" layoutY="336.0" prefHeight="32.0" prefWidth="128.0" style="-fx-background-color: #ff3349;" text="recherche" />
+    <Button fx:id="ajout" layoutX="204.0" layoutY="334.0" prefHeight="32.0" prefWidth="164.0" style="-fx-background-color: #333cff;" text="Ajout-categorie" />
 
 
 </AnchorPane>

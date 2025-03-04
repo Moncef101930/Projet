@@ -94,7 +94,7 @@ public class EventCat {
         return categorie;
     }
 
-    public Object getEvenement() {
+    public Evenements getEvenement() {
         return evenements;
     }
 

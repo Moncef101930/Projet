@@ -56,6 +56,23 @@ public boolean delete(EventCat eventCat) {
     }
 }
 
+    public boolean eventAlreadyInCategory(int eventId, int categoryId) {
+        String query = "SELECT COUNT(*) FROM event_cat WHERE idevent = ? AND idcat = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+            preparedStatement.setInt(2, categoryId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0; // Retourne vrai si l'association existe déjà
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erreur lors de la vérification de l'association événement-catégorie", e);
+        }
+        return false;
+    }
+
+
     @Override
     public boolean update(EventCat eventCat) {
         String requete = "UPDATE event_cat SET idcat = ? WHERE idevent = ?";
@@ -112,5 +129,26 @@ public boolean delete(EventCat eventCat) {
     public boolean nomExiste(String nom1) {
         return false;
     }
+    public EventCat getByEventId(int eventId) {
+        String query = "SELECT * FROM event_cat WHERE idevent = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                Categorie categorie = new Categorie();
+                categorie.setId(resultSet.getInt("idcat"));
+
+                Evenements event = new Evenements();
+                event.setIdEvenement(eventId);
+
+                return new EventCat(event, categorie);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erreur lors de la récupération de la catégorie de l'événement", e);
+        }
+        return null;
+    }
+
 
 }

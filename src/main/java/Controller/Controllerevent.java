@@ -37,8 +37,6 @@ public class Controllerevent {
     @FXML
     private TableColumn<Evenements, String> nomColumn;
 
-    @FXML
-    private Button metier;
 
     @FXML
     private TextField event; // PAS MODIFIÉ
@@ -48,11 +46,6 @@ public class Controllerevent {
     @FXML
     public void initialize() {
         // Vérification si les boutons sont bien injectés
-        if (metier == null) {
-            System.out.println("ERREUR: Le bouton 'metier' est null !");
-        } else {
-            metier.setOnAction(e -> findMostFrequentEvent());
-        }
 
         if (ajout == null) {
             System.out.println("ERREUR: Le bouton 'ajout' est null !");

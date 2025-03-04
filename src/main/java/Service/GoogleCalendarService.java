@@ -14,15 +14,13 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.EventDateTime;
-import com.google.api.services.calendar.model.Event;  //
+import com.google.api.services.calendar.model.Event;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
@@ -64,14 +62,20 @@ public class GoogleCalendarService {
                     .setLocation(eventLocation)
                     .setDescription("Imported from JavaFX application");
 
-            // Convert LocalDate to Google DateTime format
+            // Convert LocalDate to Google DateTime format (all-day event)
             DateTime startDateTime = new DateTime(eventDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
+            DateTime endDateTime = new DateTime(eventDate.plusDays(0).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
+
             EventDateTime start = new EventDateTime()
                     .setDateTime(startDateTime)
                     .setTimeZone(TimeZone.getDefault().getID());
 
+            EventDateTime end = new EventDateTime()
+                    .setDateTime(endDateTime)
+                    .setTimeZone(TimeZone.getDefault().getID());
+
             event.setStart(start);
-            event.setEnd(start); // One-day event
+            event.setEnd(end);
 
             String calendarId = "primary"; // Using the user's primary Google Calendar
             service.events().insert(calendarId, event).execute();
@@ -81,10 +85,5 @@ public class GoogleCalendarService {
             System.err.println("Error adding event to Google Calendar: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-
-    public void addEvent(Event googleEvent) {
-
     }
 }

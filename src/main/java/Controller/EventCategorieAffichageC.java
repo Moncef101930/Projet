@@ -10,12 +10,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import entite.EventCat;
 import javafx.event.ActionEvent;
+
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import java.sql.Connection;
@@ -23,7 +25,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import utile.DataSource;
-import entite.EventCat; // Create this model class
 
 public class EventCategorieAffichageC {
 
@@ -48,7 +49,6 @@ public class EventCategorieAffichageC {
     private Connection connection;
 
     private GoogleCalendarService googleCalendarService = new GoogleCalendarService();
-
 
     public void initialize() {
         connection = DataSource.getInstance().getConnection();
@@ -91,7 +91,6 @@ public class EventCategorieAffichageC {
                 eventList.add(eventCat);
             }
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,23 +108,30 @@ public class EventCategorieAffichageC {
         }
 
         for (EventCat eventCat : events) {
-            Evenements evenement = (Evenements) eventCat.getEvenement();
+            Evenements evenement = eventCat.getEvenement();
             String categories = eventCat.getCategorie();
 
-            // Convert LocalDate to Google Calendar DateTime
-            DateTime startDateTime = new DateTime(java.util.Date.from(evenement.getDateEvenement()
-                    .atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            // Convert LocalDate to ZonedDateTime for Google Calendar API
+            LocalDateTime startDateTime = evenement.getDateEvenement().atStartOfDay();
+            ZonedDateTime zonedDateTime = startDateTime.atZone(ZoneId.systemDefault());
 
+            // Convert LocalDate to the Google Calendar Date object (for all-day event)
+            com.google.api.client.util.DateTime googleStartDateTime = new com.google.api.client.util.DateTime(zonedDateTime.toInstant().toEpochMilli());
+
+            // Calculate end date as the next day (1-day event)
+            ZonedDateTime endZonedDateTime = zonedDateTime.plusDays(1);
+            com.google.api.client.util.DateTime googleEndDateTime = new com.google.api.client.util.DateTime(endZonedDateTime.toInstant().toEpochMilli());
+
+            // Create Google Calendar Event (using setDate to make it an all-day event)
             Event googleEvent = new Event()
                     .setSummary(evenement.getNomEvenement())
                     .setLocation(evenement.getLieu())
-                    .setDescription("Catégories: " + categories);
-
-            EventDateTime start = new EventDateTime().setDateTime(startDateTime);
-            googleEvent.setStart(start).setEnd(start); // One-day event
+                    .setDescription("Catégories: " + categories)
+                    .setStart(new EventDateTime().setDate(new com.google.api.client.util.DateTime(googleStartDateTime.getValue())).setTimeZone(ZoneId.systemDefault().toString()))
+                    .setEnd(new EventDateTime().setDate(new com.google.api.client.util.DateTime(googleEndDateTime.getValue())).setTimeZone(ZoneId.systemDefault().toString()));
 
             try {
-                googleCalendarService.addEvent(googleEvent);
+                googleCalendarService.addEvent(evenement.getNomEvenement(), evenement.getLieu(), evenement.getDateEvenement());
             } catch (Exception e) {
                 e.printStackTrace();
                 showAlert("Erreur", "Impossible d'exporter l'événement: " + evenement.getNomEvenement());
