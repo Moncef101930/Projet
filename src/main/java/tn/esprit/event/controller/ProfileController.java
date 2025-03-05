@@ -111,7 +111,7 @@ public class ProfileController {
 
     public void gotoLoginn(ActionEvent actionEvent) {
         try {
-            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("login.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainFX.class.getResource("dashbord_user.fxml"));
 
             Parent root = loader.load();
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();

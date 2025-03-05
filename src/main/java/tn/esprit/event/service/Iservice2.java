@@ -5,9 +5,9 @@ import java.util.List;
 public interface Iservice2<T> {
     void add(T t);
 
-    void update(T t);
+    boolean update(T t);
 
-    void delete(T t);
+    boolean delete(T t);
 
 
     T get(int id);

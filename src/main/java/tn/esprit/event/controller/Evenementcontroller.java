@@ -48,6 +48,11 @@ public class Evenementcontroller {
             showAlert("Erreur", "Tous les champs doivent être remplis !");
             return;
         }
+        if (date.isBefore(LocalDate.now())) {
+            showAlert("erreur","La date doit être après la date actuelle !");
+            return;
+        }
+
 
         Evenements evente = new Evenements(nom, description, lieu, date);
 

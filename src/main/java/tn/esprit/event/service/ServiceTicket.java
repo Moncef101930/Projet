@@ -19,44 +19,43 @@ public class ServiceTicket implements IService<Ticket> {
     @Override
     public void ajouter(Ticket ticket) {
         try {
-            String query = "INSERT INTO `ticket` "
-                    + "(`utilisateur_id`, `evenement_id`, `date_achat`, `type_ticket`) "
-                    + "VALUES ("
-                    + ticket.getUtilisateur_id() + ", "
-                    + ticket.getEvenement_id() + ", "
-                    + "'" + ticket.getDate_achat() + "', "
-                    + "'" + ticket.getType_ticket() + "')";
-            Statement st = cnx.createStatement();
-            st.executeUpdate(query);
+            String query = "INSERT INTO ticket (utilisateur_nom, evenement_nom, date_achat, type_ticket) VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = cnx.prepareStatement(query);
+            ps.setString(1, ticket.getUtilisateur_nom());
+            ps.setString(2, ticket.getEvenement_nom());
+            ps.setDate(3, Date.valueOf(ticket.getDate_achat()));
+            ps.setString(4, ticket.getType_ticket());
+            ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Erreur lors de l'ajout du ticket : " + e.getMessage());
         }
     }
 
     @Override
     public void modifier(int id, Ticket ticket) {
         try {
-            String query = "UPDATE `ticket` SET "
-                    + "`utilisateur_id`=" + ticket.getUtilisateur_id() + ", "
-                    + "`evenement_id`=" + ticket.getEvenement_id() + ", "
-                    + "`date_achat`='" + ticket.getDate_achat() + "', "
-                    + "`type_ticket`='" + ticket.getType_ticket() + "' "
-                    + "WHERE `id`=" + id;
-            Statement st = cnx.createStatement();
-            st.executeUpdate(query);
+            String query = "UPDATE ticket SET utilisateur_nom = ?, evenement_nom = ?, date_achat = ?, type_ticket = ? WHERE id = ?";
+            PreparedStatement ps = cnx.prepareStatement(query);
+            ps.setString(1, ticket.getUtilisateur_nom());
+            ps.setString(2, ticket.getEvenement_nom());
+            ps.setDate(3, Date.valueOf(ticket.getDate_achat()));
+            ps.setString(4, ticket.getType_ticket());
+            ps.setInt(5, id);
+            ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println( e.getMessage());
+            System.out.println("Erreur lors de la modification du ticket : " + e.getMessage());
         }
     }
 
     @Override
     public void supprimer(int id) {
         try {
-            String query = "DELETE FROM `ticket` WHERE `id`=" + id;
-            Statement st = cnx.createStatement();
-            st.executeUpdate(query);
+            String query = "DELETE FROM ticket WHERE id = ?";
+            PreparedStatement ps = cnx.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(  e.getMessage());
+            System.out.println("Erreur lors de la suppression du ticket : " + e.getMessage());
         }
     }
 
@@ -64,22 +63,20 @@ public class ServiceTicket implements IService<Ticket> {
     public List<Ticket> afficher() {
         List<Ticket> tickets = new ArrayList<>();
         try {
-            String query = "SELECT * FROM `ticket`";
+            String query = "SELECT * FROM ticket";
             Statement st = cnx.createStatement();
             ResultSet rs = st.executeQuery(query);
-
             while (rs.next()) {
                 Ticket ticket = new Ticket();
                 ticket.setId(rs.getLong("id"));
-                ticket.setUtilisateur_id(rs.getLong("utilisateur_id"));
-                ticket.setEvenement_id(rs.getLong("evenement_id"));
+                ticket.setUtilisateur_nom(rs.getString("utilisateur_nom"));
+                ticket.setEvenement_nom(rs.getString("evenement_nom"));
                 ticket.setDate_achat(rs.getDate("date_achat").toLocalDate());
                 ticket.setType_ticket(rs.getString("type_ticket"));
-
                 tickets.add(ticket);
             }
         } catch (SQLException e) {
-            System.out.println( e.getMessage());
+            System.out.println("Erreur lors de l'affichage des tickets : " + e.getMessage());
         }
         return tickets;
     }

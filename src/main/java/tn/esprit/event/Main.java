@@ -18,7 +18,7 @@ public class Main {
         serviceUtilisateur.supprimer(1);
         System.out.println(serviceUtilisateur.afficher());
         ServiceTicket serviceTicket=new ServiceTicket();
-        Ticket t=new Ticket(3L,4L,LocalDate.now(),"STANDAR");
+        Ticket t=new Ticket("ahmed","samara",LocalDate.now(),"STANDAR");
        //serviceTicket.ajouter(t);
         //serviceTicket.modifier(2,t);
         serviceTicket.supprimer(2);

@@ -43,10 +43,10 @@ public class Login {
                 Stage stage = (Stage)((Button) event.getSource()).getScene().getWindow();
                 FXMLLoader loader;
                 if(user.getRole() == Role.ADMIN) {
-                    loader = new FXMLLoader(MainFX.class.getResource("admin-user.fxml"));
+                    loader = new FXMLLoader(MainFX.class.getResource("dashbord_admin.fxml"));
                 } else if(user.getRole() == Role.USER) {
                     Session.setCurrentUser(user);
-                    loader = new FXMLLoader(MainFX.class.getResource("profile.fxml"));
+                    loader = new FXMLLoader(MainFX.class.getResource("dashbord_user.fxml"));
                 }else{
                     Session.setCurrentUser(user);
                     loader = new FXMLLoader(MainFX.class.getResource("dashbord.fxml"));

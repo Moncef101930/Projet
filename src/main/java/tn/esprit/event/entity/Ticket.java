@@ -3,22 +3,22 @@ import java.util.Objects;
 import java.time.LocalDate;
 public class Ticket {
     private long id;
-    private Long utilisateur_id;
-    private Long evenement_id;
+    private String utilisateur_nom;
+    private String evenement_nom;
     private LocalDate date_achat;
     private String type_ticket;
 
 
-    public Ticket(String type_ticket, LocalDate date_achat, Long evenement_id, Long utilisateur_id, long id) {
+    public Ticket(String type_ticket, LocalDate date_achat, String evenement_nom, String utilisateur_nom, long id) {
         this.type_ticket = type_ticket;
         this.date_achat = date_achat;
-        this.evenement_id = evenement_id;
-        this.utilisateur_id = utilisateur_id;
+        this.evenement_nom = evenement_nom;
+        this.utilisateur_nom = utilisateur_nom;
         this.id = id;
     }
-    public Ticket(Long utilisateur_id, Long evenement_id, LocalDate date_achat, String type_ticket) {
-        this.utilisateur_id = utilisateur_id;
-        this.evenement_id = evenement_id;
+    public Ticket(String utilisateur_nom, String evenement_nom, LocalDate date_achat, String type_ticket) {
+        this.utilisateur_nom = utilisateur_nom;
+        this.evenement_nom = evenement_nom;
         this.date_achat = date_achat;
         this.type_ticket = type_ticket;
 
@@ -30,12 +30,12 @@ public class Ticket {
         return id;
     }
 
-    public Long getUtilisateur_id() {
-        return utilisateur_id;
+    public String getUtilisateur_nom() {
+        return utilisateur_nom;
     }
 
-    public Long getEvenement_id() {
-        return evenement_id;
+    public String getEvenement_nom() {
+        return evenement_nom;
     }
 
     public LocalDate getDate_achat() {
@@ -50,12 +50,12 @@ public class Ticket {
         this.id = id;
     }
 
-    public void setUtilisateur_id(Long utilisateur_id) {
-        this.utilisateur_id = utilisateur_id;
+    public void setUtilisateur_nom(String utilisateur_nom) {
+        this.utilisateur_nom = utilisateur_nom;
     }
 
-    public void setEvenement_id(Long evenement_id) {
-        this.evenement_id = evenement_id;
+    public void setEvenement_nom(String evenement_nom) {
+        this.evenement_nom = evenement_nom;
     }
 
     public void setDate_achat(LocalDate date_achat) {
@@ -71,8 +71,8 @@ public class Ticket {
     public String toString() {
         return "Ticket{" +
                 "id=" + id +
-                ", utilisateur_id=" + utilisateur_id +
-                ", evenement_id=" + evenement_id +
+                ", utilisateur_nom=" + utilisateur_nom +
+                ", evenement_nom=" + evenement_nom +
                 ", date_achat=" + date_achat +
                 ", type_ticket='" + type_ticket + '\'' +
                 '}';
@@ -83,11 +83,11 @@ public class Ticket {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ticket ticket = (Ticket) o;
-        return id == ticket.id && Objects.equals(utilisateur_id, ticket.utilisateur_id);
+        return id == ticket.id && Objects.equals(utilisateur_nom, ticket.utilisateur_nom);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, utilisateur_id);
+        return Objects.hash(id, utilisateur_nom);
     }
 }

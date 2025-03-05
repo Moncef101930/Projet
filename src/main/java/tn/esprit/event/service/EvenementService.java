@@ -1,6 +1,7 @@
 package tn.esprit.event.service;
 
 
+import javafx.scene.control.Alert;
 import tn.esprit.event.entity.Evenements;
 import tn.esprit.event.utils.MyConnection;
 
@@ -33,7 +34,7 @@ public class EvenementService implements Iservice2<Evenements> {
         }
     }
 
-    public void delete(Evenements evenements) {
+    public boolean delete(Evenements evenements) {
         String requete = "DELETE FROM événements WHERE nom = ?";
 
         try (PreparedStatement pst = con.prepareStatement(requete)) {
@@ -42,16 +43,20 @@ public class EvenementService implements Iservice2<Evenements> {
 
             if (rowsAffected > 0) {
                 System.out.println("Événement supprimé avec succès.");
+                return true;
             } else {
                 System.out.println("Aucun événement trouvé avec le nom : " + evenements.getNomEvenement());
+                return false;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erreur lors de la suppression de l'événement : " + e.getMessage(), e);
         }
     }
 
+
+
     @Override
-    public void update(Evenements evenements) {
+    public boolean update(Evenements evenements) {
         String requete = "UPDATE événements SET lieu = ?, description = ?, date = ? WHERE nom = ?";
 
         try (PreparedStatement pst = con.prepareStatement(requete)) {
@@ -64,13 +69,16 @@ public class EvenementService implements Iservice2<Evenements> {
 
             if (rowsAffected > 0) {
                 System.out.println("Événement mis à jour avec succès.");
+                return true;
             } else {
                 System.out.println("Aucun événement trouvé avec le nom : " + evenements.getNomEvenement());
+                return false;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erreur lors de la mise à jour de l'événement : " + e.getMessage(), e);
         }
     }
+
 
     @Override
     public Evenements get(int id) {
@@ -123,5 +131,13 @@ public class EvenementService implements Iservice2<Evenements> {
     @Override
     public boolean nomExiste(String nom1) {
         return false;
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

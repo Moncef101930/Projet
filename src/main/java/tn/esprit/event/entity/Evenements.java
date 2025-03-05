@@ -1,6 +1,7 @@
 package tn.esprit.event.entity;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Evenements {
     private int idEvenement;
@@ -22,6 +23,9 @@ public class Evenements {
         this.descriptionEvenement = descriptionEvenement;
         this.lieu = lieu;
         this.dateEvenement = dateEvenement;
+    }
+
+    public Evenements() {
     }
 
     public int getIdEvenement() {
@@ -62,6 +66,14 @@ public class Evenements {
 
     public void setDateEvenement(LocalDate dateEvenement) {
         this.dateEvenement = dateEvenement;
+    }
+
+    // Retourne la date sous forme de String pour affichage dans TableView
+    public String getDateEvenementAsString() {
+        if (dateEvenement != null) {
+            return dateEvenement.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        return "";
     }
 
     @Override
