@@ -37,7 +37,7 @@ public class Login {
             return;
         }
         Utilisateur user = serviceUtilisateur.findByEmail(email);
-        if(user != null && BCryptPass.checkPass(password, user.getMot_de_passe())){
+        if(user != null && BCryptPass.checkPass(password, user.getMot_de_passe().replace("$2y$","$2a$"))){
             errorLabel.setText("Login successful!");
             try {
                 Stage stage = (Stage)((Button) event.getSource()).getScene().getWindow();

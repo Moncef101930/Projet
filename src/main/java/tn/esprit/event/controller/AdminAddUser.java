@@ -78,7 +78,7 @@ public class AdminAddUser {
             selectedUser.setNom(nom);
             selectedUser.setPrenom(prenom);
             selectedUser.setEmail(email);
-            selectedUser.setMot_de_passe(password);
+            selectedUser.setMot_de_passe(hashedPassword);
             selectedUser.setRole(role);
             selectedUser.setDate_naissance(dateNaissance);
             selectedUser.setBio(bio);

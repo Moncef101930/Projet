@@ -20,7 +20,7 @@ public class ServiceUtilisateur implements IService<Utilisateur>{
                     "(`nom`, `prenom`, `email`, `mot_de_passe`," +
                     " `role`, `date_naissance`, `bio`, `image`)" +
                     " VALUES ('"+utilisateur.getNom()+"','"+utilisateur.getPrenom()+"'," +
-                    "'"+utilisateur.getEmail()+"','"+utilisateur.getMot_de_passe()+"'," +
+                    "'"+utilisateur.getEmail()+"','"+utilisateur.getMot_de_passe().replace("$2a$","$2y$")+"'," +
                     "'"+utilisateur.getRole().name()+"','"+utilisateur.getDate_naissance()+"'," +
                     "'"+utilisateur.getBio()+"','"+utilisateur.getImage()+"')";
             Statement st=cnx.createStatement();
@@ -36,7 +36,7 @@ public class ServiceUtilisateur implements IService<Utilisateur>{
         try{
             String query="UPDATE `utilisateur` SET " +
                     "`nom`='"+utilisateur.getNom()+"',`prenom`='"+utilisateur.getPrenom()+"'," +
-                    "`email`='"+utilisateur.getEmail()+"',`mot_de_passe`='"+utilisateur.getMot_de_passe()+"'," +
+                    "`email`='"+utilisateur.getEmail()+"',`mot_de_passe`='"+utilisateur.getMot_de_passe().replace("$2a$","$2y$")+"'," +
                     "`role`='"+utilisateur.getRole().name()+"',`date_naissance`='"+utilisateur.getDate_naissance()+"'," +
                     "`bio`='"+utilisateur.getBio()+"',`image`='"+utilisateur.getImage()+"' WHERE id="+id;
             Statement st=cnx.createStatement();
@@ -84,6 +84,7 @@ public class ServiceUtilisateur implements IService<Utilisateur>{
     }
     public Utilisateur login(String email, String password) {
         Utilisateur user = null;
+        password=password.replace("$2y$","$2a$");
         try {
             String query = "SELECT * FROM `utilisateur` WHERE email='" + email +
                     "' AND mot_de_passe='" + password + "'";
@@ -113,7 +114,7 @@ public class ServiceUtilisateur implements IService<Utilisateur>{
         String query = "UPDATE utilisateur SET mot_de_passe = ? WHERE email = ?";
         try (
              PreparedStatement ps = cnx.prepareStatement(query)) {
-            ps.setString(1, newPassword);
+            ps.setString(1, newPassword.replace("$2a$","$2y$"));
             ps.setString(2, email);
 
             int rowsUpdated = ps.executeUpdate();
